@@ -25,7 +25,7 @@ namespace :copy do
       execute :mkdir, "-p", release_path
 
       # Create a temporary file on the server
-      tmp_file = capture("mktemp")
+      tmp_file = capture("mktemp /tmp/tmp.XXXXXXXXXXXXXX")
 
       # Upload the archive, extract it and finally remove the tmp_file
       upload!(tarball, tmp_file)
