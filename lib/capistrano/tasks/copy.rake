@@ -7,11 +7,13 @@ namespace :copy do
   exclude_args = exclude_dir.map { |dir| "--exclude '#{dir}'"}
 
   # Defalut to :all roles
-  tar_roles = fetch(:tar_roles, 'all')
+  tar_roles = fetch(:tar_roles, :all)
+
+  tar_verbose = fetch(:tar_verbose, true) ? "v" : ""
 
   desc "Archive files to #{archive_name}"
   file archive_name => FileList[include_dir].exclude(archive_name) do |t|
-    cmd = ["tar -cvzf #{t.name}", *exclude_args, *t.prerequisites]
+    cmd = ["tar -c#{tar_verbose}zf #{t.name}", *exclude_args, *t.prerequisites]
     sh cmd.join(' ')
   end
 
@@ -32,14 +34,14 @@ namespace :copy do
       execute :tar, "-xzf", tmp_file, "-C", release_path
       execute :rm, tmp_file
     end
-
-    Rake::Task["copy:clean"].invoke
   end
 
   task :clean do |t|
     # Delete the local archive
     File.delete archive_name if File.exists? archive_name
   end
+
+  after 'deploy:finished', 'copy:clean'
 
   task :create_release => :deploy
   task :check

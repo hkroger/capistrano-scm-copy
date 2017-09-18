@@ -25,6 +25,10 @@ First make sure you install the capistrano-scm-copy by adding it to your `Gemfil
 
     gem "capistrano-scm-copy"
 
+Add to Capfile:
+
+    require 'capistrano/copy'
+    
 Then switch the `:scm` option to `:copy` in `config/deploy.rb`:
 
     set :scm, :copy
@@ -41,6 +45,11 @@ The MIT License (MIT)
 
 Changelog
 =========
+
+0.5.0
+-----
+
+- Fix issue related to `tar_roles` (see wercker/capistrano-scm-copy#15)
 
 0.4.0
 -----
